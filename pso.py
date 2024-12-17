@@ -1,25 +1,19 @@
 import math
 
-def calcular_equacao(equacao: str, x1: float, x2: float) -> float:
+def rastrigin(x: list) -> float:
     """
-    Avalia uma equação dada em termos de x1 e x2 e retorna o resultado.
-
-    :param equacao: A equação como string, por exemplo "sqrt(x1**2) + x2"
-    :param x1: Valor de x1
-    :param x2: Valor de x2
-    :return: O resultado da equação
+    Calcula o valor da função de Rastrigin para um vetor x.
+    
+    :param x: Lista de valores (vetor x)
+    :return: Resultado da função de Rastrigin
     """
-    try:
-        # Permite o uso de funções matemáticas como sqrt
-        contexto = {"x1": x1, "x2": x2, "sqrt": math.sqrt, "__builtins__": None}
-        resultado = eval(equacao, contexto)
-        return resultado
-    except Exception as e:
-        raise ValueError(f"Erro ao calcular a equação: {e}")
+    d = len(x)  # Dimensão do vetor
+    resultado = 10 * d  # Termo constante 10d
+    for xi in x:
+        resultado += xi**2 - 10 * math.cos(2 * math.pi * xi)
+    return resultado
 
 # Exemplo de uso
-equacao = "sqrt(x1**2) + x2**2"
-x1 = -3
-x2 = 4
-resultado = calcular_equacao(equacao, x1, x2)
-print(f"O resultado da equação '{equacao}' para x1={x1} e x2={x2} é: {resultado}")
+x = [0, 0]  # Ponto no espaço de busca
+resultado = rastrigin(x)
+print(f"O valor da função de Rastrigin no ponto {x} é: {resultado}")
