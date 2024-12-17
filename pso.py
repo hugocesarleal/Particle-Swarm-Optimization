@@ -1,41 +1,25 @@
-import random
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-import time
+import math
 
-def gerar_coordenadas(n_pontos):
-    return [(round(random.uniform(0, 5), 1), 
-             round(random.uniform(0, 5), 1), 
-             round(random.uniform(0, 5), 1)) for _ in range(n_pontos)]
+def calcular_equacao(equacao: str, x1: float, x2: float) -> float:
+    """
+    Avalia uma equação dada em termos de x1 e x2 e retorna o resultado.
 
-def atualizar_grafico(n_pontos, n_atualizacoes, delay=0.5):
-    # Configurar figura e eixo 3D
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
+    :param equacao: A equação como string, por exemplo "sqrt(x1**2) + x2"
+    :param x1: Valor de x1
+    :param x2: Valor de x2
+    :return: O resultado da equação
+    """
+    try:
+        # Permite o uso de funções matemáticas como sqrt
+        contexto = {"x1": x1, "x2": x2, "sqrt": math.sqrt, "__builtins__": None}
+        resultado = eval(equacao, contexto)
+        return resultado
+    except Exception as e:
+        raise ValueError(f"Erro ao calcular a equação: {e}")
 
-    for _ in range(n_atualizacoes):
-        # Gerar novos pontos
-        coordenadas = gerar_coordenadas(n_pontos)
-        x = [p[0] for p in coordenadas]
-        y = [p[1] for p in coordenadas]
-        z = [p[2] for p in coordenadas]
-
-        # Limpar o gráfico antigo e plotar os novos pontos
-        ax.cla()  # Clear axis
-        ax.scatter(x, y, z, c='blue', marker='o')
-
-        # Personalizar os eixos
-        ax.set_xlabel('X')
-        ax.set_ylabel('Y')
-        ax.set_zlabel('Z')
-
-        # Atualizar a figura
-        plt.draw()
-        plt.pause(delay)  # Espera entre atualizações
-
-    plt.show()
-
-# Configurações
-n_pontos = 1000        # Número de pontos
-n_atualizacoes = 100  # Número de atualizações
-atualizar_grafico(n_pontos, n_atualizacoes, delay=0.1)
+# Exemplo de uso
+equacao = "sqrt(x1**2) + x2**2"
+x1 = -3
+x2 = 4
+resultado = calcular_equacao(equacao, x1, x2)
+print(f"O resultado da equação '{equacao}' para x1={x1} e x2={x2} é: {resultado}")
