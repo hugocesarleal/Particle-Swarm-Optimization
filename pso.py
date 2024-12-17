@@ -49,7 +49,7 @@ def pso(maxIter, w, c1, c2, qtdeParticulas, nDimensoes, limInf, limSup, plotar):
     ftgBest = []
 
     if plotar:
-        fig, ax = inicializar_grafico(limInf, limSup, particulas)
+        fig, ax = inicializar_grafico()
     
     for iter in range(maxIter):
         velocidades = calcularVelocidades(w, c1, c2, particulas, velocidades, pBest, gBest, nDimensoes)
@@ -68,7 +68,7 @@ def pso(maxIter, w, c1, c2, qtdeParticulas, nDimensoes, limInf, limSup, plotar):
                 gBest = novaPosicao
 
         if plotar:
-            atualizar_grafico(ax, particulas, intervalo=0.1)
+            atualizar_grafico(ax, particulas, iter, intervalo=1.1)
 
         ftMedia.append(sum(fitness) / len(fitness))
         ftgBest.append(fit(gBest))
@@ -82,11 +82,11 @@ def arredondar_solucao(tupla, casas_decimais=4):
     return tuple(round(coordenada, casas_decimais) for coordenada in tupla)
 
 if __name__ == "__main__":
-    maxIter = 1000
+    maxIter = 20
     w = 0.5
     c1 = 1.3
     c2 = 1.5
-    qtdeParticulas = 1000
+    qtdeParticulas = 5000
     nDimensoes = 2
     limInf = -5
     limSup = 5
@@ -97,4 +97,4 @@ if __name__ == "__main__":
     sol_arredondada = arredondar_solucao(sol)
 
     print(sol_arredondada)
-    print("Fitness: ",fit(sol))
+    print("Fitness: ",round(fit(sol),4))
