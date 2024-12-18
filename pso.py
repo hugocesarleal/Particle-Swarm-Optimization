@@ -2,18 +2,18 @@ import math
 import random
 import numpy as np
 import matplotlib.pyplot as plt
-from visualizacao import atualizar_grafico, inicializar_grafico
+from visualizacao import atualizarGrafico, inicializarGrafico
 
 def fit(x):
     d = len(x)
-    resultado = 10 * d 
+    resultado = 10 * d
     for xi in x:
         resultado += xi**2 - 10 * math.cos(2 * math.pi * xi)
     return resultado
 
-def calcular_fitness(lista_de_itens):
-    lista_fitness = [fit(item) for item in lista_de_itens]
-    return lista_fitness
+def calcularFitness(listaDeItens):
+    listaFitness = [fit(item) for item in listaDeItens]
+    return listaFitness
 
 def solInicial(n, d, limInf, limSup):
     if limInf > limSup:
@@ -32,9 +32,7 @@ def calcularVelocidades(w, c1, c2, particulas, velocidades, pBest, gBest, nDimen
     
     i = 0
     for v in velocidades:
-        velocidade = tuple((
-        (w * v[d]) + (c1 * cognitivo[i][d]) + (c2 * social[i][d]) 
-        for d in range(nDimensoes)))
+        velocidade = tuple((w * v[d]) + (c1 * cognitivo[i][d]) + (c2 * social[i][d]) for d in range(nDimensoes))
         novasVelocidades.append(velocidade)
         i += 1
     return novasVelocidades
@@ -42,14 +40,14 @@ def calcularVelocidades(w, c1, c2, particulas, velocidades, pBest, gBest, nDimen
 def pso(maxIter, w, c1, c2, qtdeParticulas, nDimensoes, limInf, limSup, plotar):
     particulas = solInicial(qtdeParticulas, nDimensoes, limInf, limSup)
     velocidades = solInicial(qtdeParticulas, nDimensoes, limInf, limSup)
-    fitness = calcular_fitness(particulas)
+    fitness = calcularFitness(particulas)
     pBest = particulas
     gBest = particulas[fitness.index(min(fitness))]
     ftMedia = []
-    ftgBest = []
+    ftGBest = []
 
     if plotar:
-        fig, ax = inicializar_grafico()
+        fig, ax = inicializarGrafico()
     
     for iter in range(maxIter):
         velocidades = calcularVelocidades(w, c1, c2, particulas, velocidades, pBest, gBest, nDimensoes)
@@ -68,18 +66,18 @@ def pso(maxIter, w, c1, c2, qtdeParticulas, nDimensoes, limInf, limSup, plotar):
                 gBest = novaPosicao
 
         if plotar:
-            atualizar_grafico(ax, particulas, iter, intervalo=0.1)
+            atualizarGrafico(ax, particulas, iter, intervalo=0.1)
 
         ftMedia.append(sum(fitness) / len(fitness))
-        ftgBest.append(fit(gBest))
+        ftGBest.append(fit(gBest))
 
     if plotar:
         plt.show()
 
     return gBest
 
-def arredondar_solucao(tupla, casas_decimais=4):
-    return tuple(round(coordenada, casas_decimais) for coordenada in tupla)
+def arredondarSolucao(tupla, casasDecimais):
+    return tuple(round(coordenada, casasDecimais) for coordenada in tupla)
 
 if __name__ == "__main__":
     maxIter = 50
@@ -94,7 +92,7 @@ if __name__ == "__main__":
 
     sol = pso(maxIter, w, c1, c2, qtdeParticulas, nDimensoes, limInf, limSup, plotar)
 
-    sol_arredondada = arredondar_solucao(sol)
+    solArredondada = arredondarSolucao(sol,4)
 
-    print(sol_arredondada)
-    print("Fitness: ",round(fit(sol),4))
+    print(solArredondada)
+    print("Fitness: ", round(fit(sol), 4))
