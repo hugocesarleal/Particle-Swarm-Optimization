@@ -1,13 +1,12 @@
+import math
 import random
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
 from visualizacao import atualizar_grafico, inicializar_grafico
 
 def fit(x):
-    import math  # Importação local para evitar problemas de importação circular
-
-    d = len(x)  # Dimensão do vetor
-    resultado = 10 * d  # Termo constante 10d
+    d = len(x)
+    resultado = 10 * d 
     for xi in x:
         resultado += xi**2 - 10 * math.cos(2 * math.pi * xi)
     return resultado
@@ -21,8 +20,8 @@ def solInicial(n, d, limInf, limSup):
         raise ValueError("O valor mínimo do intervalo deve ser menor ou igual ao valor máximo.")
     
     vetor = [
-        tuple(random.uniform(limInf, limSup) for _ in range(d))  # Gera d valores para cada tupla
-        for _ in range(n)  # Repete n vezes
+        tuple(random.uniform(limInf, limSup) for _ in range(d))
+        for _ in range(n)
     ]
     return vetor
 
@@ -31,7 +30,6 @@ def calcularVelocidades(w, c1, c2, particulas, velocidades, pBest, gBest, nDimen
     cognitivo = [tuple(x1 - x2 for x1, x2 in zip(tupla1, tupla2)) for tupla1, tupla2 in zip(pBest, particulas)]
     social = [tuple(x - y for x, y in zip(gBest, tupla)) for tupla in particulas]
     
-
     i = 0
     for v in velocidades:
         velocidade = tuple((
@@ -76,7 +74,7 @@ def pso(maxIter, w, c1, c2, qtdeParticulas, nDimensoes, limInf, limSup, plotar):
         ftgBest.append(fit(gBest))
 
     if plotar:
-        plt.show()  # Exibe o gráfico final
+        plt.show()
 
     return gBest
 
