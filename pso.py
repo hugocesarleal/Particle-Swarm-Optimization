@@ -42,14 +42,16 @@ def solInicial(n, d, limInf, limSup):
     ]
     return vetor
 
-def calcularVelocidades(w, c1, c2, particulas, velocidades, pBest, gBest, nDimensoes):
+def calcularVelocidades(w, c1, c2, particulas, velocidades, pBest, gBest, nDimensoes, vMax):
     novasVelocidades = []
     cognitivo = [tuple(x1 - x2 for x1, x2 in zip(tupla1, tupla2)) for tupla1, tupla2 in zip(pBest, particulas)]
     social = [tuple(x - y for x, y in zip(gBest, tupla)) for tupla in particulas]
     
     i = 0
     for v in velocidades:
-        velocidade = tuple((w * v[d]) + (c1 * cognitivo[i][d]) + (c2 * social[i][d]) for d in range(nDimensoes))
+        velocidade = tuple((w * v[d]) + (c1 * random.random() * cognitivo[i][d]) + (c2 * random.random() * social[i][d]) for d in range(nDimensoes))
+        # Limitar a velocidade
+        velocidade = tuple(max(min(vel, vMax), -vMax) for vel in velocidade)
         novasVelocidades.append(velocidade)
         i += 1
     return novasVelocidades
@@ -61,13 +63,18 @@ def pso(maxIter, w, c1, c2, qtdeParticulas, nDimensoes, limInf, limSup, plotar):
     pBest = particulas
     gBest = particulas[fitness.index(min(fitness))]
     ftMedia = []
+    ftDesvioPadrao = []
     ftGBest = []
+    vMax = (limSup - limInf) * 0.1  # Limite de velocidade
 
     if plotar:
         fig, ax = inicializarGrafico()
     
     for iter in range(maxIter):
-        velocidades = calcularVelocidades(w, c1, c2, particulas, velocidades, pBest, gBest, nDimensoes)
+        # Inércia adaptativa
+        w = 0.9 - (0.5 * iter / maxIter)
+        
+        velocidades = calcularVelocidades(w, c1, c2, particulas, velocidades, pBest, gBest, nDimensoes, vMax)
         
         for i in range(qtdeParticulas):
             p = particulas[i]
@@ -82,16 +89,19 @@ def pso(maxIter, w, c1, c2, qtdeParticulas, nDimensoes, limInf, limSup, plotar):
             if fit(novaPosicao) < fit(gBest):
                 gBest = novaPosicao
 
+        fitness = calcularFitness(particulas)
+        ftMedia.append(sum(fitness) / len(fitness))
+        ftDesvioPadrao.append(np.std(fitness))
+        ftGBest.append(fit(gBest))
+
         if plotar:
             atualizarGrafico(ax, particulas, iter, gBest, intervalo=0.1)
-
-        ftMedia.append(sum(fitness) / len(fitness))
-        ftGBest.append(fit(gBest))
 
     if plotar:
         plt.show()
 
-    return gBest
+    mediaFitnessTotal = sum(ftMedia) / len(ftMedia)
+    return gBest, ftMedia, ftDesvioPadrao, mediaFitnessTotal
 
 if __name__ == "__main__":
     maxIter = 100
@@ -104,7 +114,26 @@ if __name__ == "__main__":
     limSup = 5.12
     plotar = True
 
-    sol = pso(maxIter, w, c1, c2, qtdeParticulas, nDimensoes, limInf, limSup, plotar)
+    sol, ftMedia, ftDesvioPadrao, mediaFitnessTotal = pso(maxIter, w, c1, c2, qtdeParticulas, nDimensoes, limInf, limSup, plotar)
 
-    print(sol)
-    print("Fitness: ", fit(sol))
+    print("Melhor solução: ", sol)
+    print("Melhor Fitness: ", fit(sol))
+    print("Média da Fitness Total: ", mediaFitnessTotal)
+
+    # Plotar a média da fitness por geração
+    plt.figure()
+    plt.plot(range(maxIter), ftMedia, label='Média da Fitness')
+    plt.xlabel('Geração')
+    plt.ylabel('Média da Fitness')
+    plt.title('Média da Fitness por Geração')
+    plt.legend()
+    plt.show()
+
+    # Plotar o desvio padrão da fitness por geração
+    plt.figure()
+    plt.plot(range(maxIter), ftDesvioPadrao, label='Desvio Padrão da Fitness', color='red')
+    plt.xlabel('Geração')
+    plt.ylabel('Desvio Padrão da Fitness')
+    plt.title('Desvio Padrão da Fitness por Geração')
+    plt.legend()
+    plt.show()
