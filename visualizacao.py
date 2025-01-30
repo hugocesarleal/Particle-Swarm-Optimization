@@ -19,13 +19,16 @@ def inicializarGrafico():
     ax.set_zlim(0, 200)
     return fig, ax
 
-def atualizarGrafico(ax, particulas, iteracao, intervalo=0.1):
+def atualizarGrafico(ax, particulas, iteracao, gBest, intervalo=0.1):
+    from pso import fit
     xLim = ax.get_xlim()
     yLim = ax.get_ylim()
     zLim = ax.get_zlim()
     ax.cla()
     plotarParticulas(particulas, ax)
-    ax.set_title(f'Iteração: {iteracao+1}')
+    fitness_gBest = fit(gBest)
+    gBest_formatado = tuple(f"{coord:.5f}" for coord in gBest)
+    ax.set_title(f'Iteração: {iteracao+1} | gBest: {gBest_formatado} | Fitness: {fitness_gBest:.5f}')
     ax.set_xlim(xLim)
     ax.set_ylim(yLim)
     ax.set_zlim(zLim)

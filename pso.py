@@ -4,8 +4,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from visualizacao import atualizarGrafico, inicializarGrafico
 
-PENALIDADE = 10000  # Valor alto para penalidade
-
 def fit(x):
     x = np.array(x)  # Convert tuple to numpy array
     n = len(x)
@@ -85,7 +83,7 @@ def pso(maxIter, w, c1, c2, qtdeParticulas, nDimensoes, limInf, limSup, plotar):
                 gBest = novaPosicao
 
         if plotar:
-            atualizarGrafico(ax, particulas, iter, intervalo=0.1)
+            atualizarGrafico(ax, particulas, iter, gBest, intervalo=0.1)
 
         ftMedia.append(sum(fitness) / len(fitness))
         ftGBest.append(fit(gBest))
