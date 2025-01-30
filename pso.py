@@ -4,16 +4,35 @@ import numpy as np
 import matplotlib.pyplot as plt
 from visualizacao import atualizarGrafico, inicializarGrafico
 
+PENALIDADE = 10000  # Valor alto para penalidade
+
 def fit(x):
-    d = len(x)
-    resultado = 10 * d
-    for xi in x:
-        resultado += xi**2 - 10 * math.cos(2 * math.pi * xi)
+    x = np.array(x)  # Convert tuple to numpy array
+    n = len(x)
+
+    # Critérios de penalização
+    r = 10
+    s = 12
+
+    # Cálculo do fitness
+    fx = 10 * n + np.sum(x**2 - 10 * np.cos(2 * np.pi * x))  # Fitness do indivíduo
+    gx = np.sum(r * np.maximum(0, np.sin(2 * np.pi * x) + 0.5))   # gi(x) desigualdade
+    hx = np.sum(s * np.abs(np.cos(2 * np.pi * x) + 0.5))        # hi(x0) igualdade
+    resultado = fx + gx + hx                                # Fitness com penalizações aplicadas
+
     return resultado
 
 def calcularFitness(listaDeItens):
     listaFitness = [fit(item) for item in listaDeItens]
     return listaFitness
+
+def gX(coordenada):
+    g = math.sin(2*math.pi*coordenada) + 0.5
+    return g < 0
+
+def hX(coordenada):
+    h = math.cos(2*math.pi*coordenada) + 0.5
+    return h == 0
 
 def solInicial(n, d, limInf, limSup):
     if limInf > limSup:
@@ -76,15 +95,12 @@ def pso(maxIter, w, c1, c2, qtdeParticulas, nDimensoes, limInf, limSup, plotar):
 
     return gBest
 
-def arredondarSolucao(tupla, casasDecimais):
-    return tuple(round(coordenada, casasDecimais) for coordenada in tupla)
-
 if __name__ == "__main__":
-    maxIter = 50
+    maxIter = 100
     w = 0.5
     c1 = 1.3
-    c2 = 1.5
-    qtdeParticulas = 5000
+    c2 = 0.05
+    qtdeParticulas = 500
     nDimensoes = 2
     limInf = -5.12
     limSup = 5.12
@@ -92,7 +108,5 @@ if __name__ == "__main__":
 
     sol = pso(maxIter, w, c1, c2, qtdeParticulas, nDimensoes, limInf, limSup, plotar)
 
-    solArredondada = arredondarSolucao(sol,4)
-
-    print(solArredondada)
-    print("Fitness: ", round(fit(sol), 4))
+    print(sol)
+    print("Fitness: ", fit(sol))
