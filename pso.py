@@ -98,6 +98,7 @@ def pso(maxIter, w, c1, c2, qtdeParticulas, nDimensoes, limInf, limSup, plotar):
     
     if plotar:
         plt.show() #Mostra o gráfico
+    
         plotarEstatisticas(iteracoes, mediasFitness, desviosFitness) #Plota as estatísticas
     
     return gBest #Retorna a melhor posição global
@@ -112,7 +113,7 @@ if __name__ == "__main__":
     nDimensoes = 5
     limInf = -5.12
     limSup = 5.12
-    plotar = True
+    plotar = False
 
     tempoInicio = time.time() #Marca o tempo de início
     sol = pso(maxIter, w, c1, c2, qtdeParticulas, nDimensoes, limInf, limSup, plotar) #Executa o PSO
