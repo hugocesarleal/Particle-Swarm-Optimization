@@ -15,14 +15,14 @@ Este projeto é um trabalho da disciplina de Inteligência Artificial que implem
     pip install matplotlib numpy
     ```
 
-2. Execute o script [pso.py](http://_vscodecontentref_/1):
+2. Execute o script **pso.py**:
     ```sh
     python pso.py
     ```
 
 ## Parâmetros do Algoritmo
 
-Os parâmetros do algoritmo PSO podem ser ajustados diretamente no arquivo [pso.py](http://_vscodecontentref_/2):
+Os parâmetros do algoritmo PSO podem ser ajustados diretamente no arquivo **pso.py**:
 - `maxIter`: Número máximo de iterações.
 - `w`: Peso inercial.
 - `c1`: Coeficiente cognitivo.
@@ -35,7 +35,7 @@ Os parâmetros do algoritmo PSO podem ser ajustados diretamente no arquivo [pso.
 
 ## Visualização
 
-O projeto inclui visualizações em 3D das partículas e gráficos das estatísticas de fitness ao longo das iterações. Para ativar a visualização, defina `plotar = True` no arquivo [pso.py](http://_vscodecontentref_/3).
+O projeto inclui visualizações em 3D das partículas e gráficos das estatísticas de fitness ao longo das iterações. Para ativar a visualização, defina `plotar = True` no arquivo **pso.py**.
 
 ## Licença
 
