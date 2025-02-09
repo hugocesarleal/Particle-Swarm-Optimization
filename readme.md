@@ -36,7 +36,3 @@ Os parâmetros do algoritmo PSO podem ser ajustados diretamente no arquivo **pso
 ## Visualização
 
 O projeto inclui visualizações em 3D das partículas e gráficos das estatísticas de fitness ao longo das iterações. Para ativar a visualização, defina `plotar = True` no arquivo **pso.py**.
-
-## Licença
-
-Este projeto é distribuído sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
